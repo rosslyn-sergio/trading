@@ -8,9 +8,44 @@ class PlotModel(object):
                 self.xlabel = xlabel
                 self.ylabel = ylabel
 
-def read_csv_data(filename):
-        df = pd.read_csv(filename, header=None, delimiter=",", dtype=np.float64)
-        return df
+def create_training_set(filename):
+	#read csv
+	df = pd.read_csv(filename, index_col="Date", parse_dates=True, na_values=['nan'])
+	
+	#normalise
+	df = df/df.iloc[0,:]
+	
+	#add daily returns
+	df["Daily_Returns"] = (df["Adj Close"] / df["Adj Close"].shift(1)) - 1
+	df.at[df.index.values[0], ["Daily_Returns"]] = 0
+
+	#calculate statistics
+	stats_df = pd.DataFrame(index=pd.DatetimeIndex([]))
+	#rolling average
+	windows = [5,10,20]
+	for w in windows:
+		temp_df = get_rolling_mean(df, w)
+		stats_df = pd.concat([stats_df, temp_df], axis=1, join='outer' if w == windows[0] else 'inner')
+		
+	
+	#Add labels
+	df["Label"] = (df["Adj Close"] < df["Adj Close"].shift(-1)).astype(int)
+	
+	return df, stats_df
+
+	
+def calculate_statistics(df):
+	pass
+
+def get_rolling_mean(df, window=20):
+	res_df = df[["Adj Close","Daily_Returns"]].rolling(center=False,window=window).mean()
+	res_df.columns = ["Adj_Close_Mean{}".format(window),"Daily_Returns_Mean{}".format(window)]
+	return res_df
+
+
+def get_standard_deviation(df, sample_size=20):
+	pass	
+
 
 def plot_data(df, xcol, ycol):
         plt.plot(df[xcol], df[ycol], "rx")
