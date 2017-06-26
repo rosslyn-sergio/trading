@@ -22,11 +22,12 @@ def create_training_set(filename):
 	#calculate statistics
 	stats_df = pd.DataFrame(index=pd.DatetimeIndex([]))
 	#rolling average
-	windows = [5,10,20]
+	windows = [5,10]
 	for w in windows:
 		temp_df = get_rolling_mean(df, w)
 		stats_df = pd.concat([stats_df, temp_df], axis=1, join='outer' if w == windows[0] else 'inner')
-		
+		temp_df = get_rolling_standard_deviation(df, w)
+		stats_df = pd.concat([stats_df, temp_df], axis=1, join='outer' if w == windows[0] else 'inner')
 	
 	#Add labels
 	df["Label"] = (df["Adj Close"] < df["Adj Close"].shift(-1)).astype(int)
@@ -43,8 +44,10 @@ def get_rolling_mean(df, window=20):
 	return res_df
 
 
-def get_standard_deviation(df, sample_size=20):
-	pass	
+def get_rolling_standard_deviation(df,window=20):
+	res_df = df[["Adj Close", "Daily_Returns"]].rolling(center=False, window=window).std()
+	res_df.columns = ["Adj_Close_Std{}".format(window),"Daily_Returns_Std{}".format(window)]
+	return res_df
 
 
 def plot_data(df, xcol, ycol):
