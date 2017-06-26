@@ -13,8 +13,18 @@ if __name__ == "__main__":
 	#print(df.head(5))
 	'''
 	#print(stats_df.head(30))
-	jdf = pd.concat([df[["High","Low","Label"]], stats_df], axis=1, join='inner')
+	jdf = pd.concat([df, stats_df], axis=1, join='inner')
+	print(jdf.columns)
+	x ="Adj Close"
+	y = "Low10"
+	plotModel = PlotModel(title="Log Reg", xlabel=x, ylabel=y)
+	plot_logistic_regression_data(jdf, xcol=x, ycol=y, feature="Label", plotModel=plotModel)
 	
+	x ="High10"
+	y = "Low10"
+	plotModel = PlotModel(title="Log Reg", xlabel=x, ylabel=y)
+	plot_logistic_regression_data(jdf, xcol=x, ycol=y, feature="Label", plotModel=plotModel)
+
 	x = "Low"
 	y = "Adj_Close_Mean10"
 	plotModel = PlotModel(title="Log Reg", xlabel=x, ylabel=y)

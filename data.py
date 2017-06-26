@@ -24,11 +24,23 @@ def create_training_set(filename):
 	#rolling average
 	windows = [5,10]
 	for w in windows:
+		#rolling mean	
 		temp_df = get_rolling_mean(df, w)
 		stats_df = pd.concat([stats_df, temp_df], axis=1, join='outer' if w == windows[0] else 'inner')
+		
+		#rolling std
 		temp_df = get_rolling_standard_deviation(df, w)
 		stats_df = pd.concat([stats_df, temp_df], axis=1, join='outer' if w == windows[0] else 'inner')
-	
+		
+		#rolling high
+		temp_df = get_rolling_high(df, w)
+		stats_df = pd.concat([stats_df, temp_df], axis=1, join='outer' if w == windows[0] else 'inner')
+		
+		#rolling low
+		temp_df = get_rolling_low(df, w)
+		stats_df = pd.concat([stats_df, temp_df], axis=1, join='outer' if w == windows[0] else 'inner')
+
+
 	#Add labels
 	df["Label"] = (df["Adj Close"] < df["Adj Close"].shift(-1)).astype(int)
 	
@@ -49,6 +61,15 @@ def get_rolling_standard_deviation(df,window=20):
 	res_df.columns = ["Adj_Close_Std{}".format(window),"Daily_Returns_Std{}".format(window)]
 	return res_df
 
+def get_rolling_high(df, window=20):
+	res_df = df[["High"]].rolling(center=False, window=window).max()
+	res_df.columns = ["High{}".format(window)]
+	return res_df
+
+def get_rolling_low(df, window=20):
+	res_df = df[["Low"]].rolling(center=False, window=window).min()
+	res_df.columns = ["Low{}".format(window)]
+	return res_df
 
 def plot_data(df, xcol, ycol):
         plt.plot(df[xcol], df[ycol], "rx")
