@@ -11,7 +11,7 @@ if __name__ == "__main__":
 			plotModel = PlotModel(title="Log Reg", xlabel=x, ylabel=y)
 			plot_logistic_regression_data(df, xcol=x, ycol=y, feature="Label", plotModel=plotModel)
 	#print(df.head(5))
-	'''
+
 	#print(stats_df.head(30))
 	jdf = pd.concat([df, stats_df], axis=1, join='inner')
 	print(jdf.columns)
@@ -46,3 +46,13 @@ if __name__ == "__main__":
 	y = "Low"
 	plotModel = PlotModel(title="Log Reg", xlabel=x, ylabel=y)
 	plot_logistic_regression_data(jdf, xcol=x, ycol=y, feature="Label", plotModel=plotModel)
+	'''
+	plot_data(df,col="Adj Close")
+	jdf = pd.concat([df, stats_df], axis=1, join='inner')
+	x ="Adj Close"
+	y = "Adj_Close_Mean10"
+	plotModel = PlotModel(title="Log Reg", xlabel=x, ylabel=y)
+	plot_ternary_log_reg_data(jdf, xcol=x, ycol=y, feature="Label5", plotModel=plotModel)
+
+#	print(df["Label5"].head(10))
+	
