@@ -49,10 +49,51 @@ if __name__ == "__main__":
 	'''
 	plot_data(df,col="Adj Close")
 	jdf = pd.concat([df, stats_df], axis=1, join='inner')
+	
+	'''
 	x ="Adj Close"
 	y = "Adj_Close_Mean10"
 	plotModel = PlotModel(title="Log Reg", xlabel=x, ylabel=y)
+	plot_ternary_log_reg_data(jdf, xcol=x, ycol=y, feature="Label10", plotModel=plotModel)
+
+	y ="High10"
+	x = "Adj Close"
+	plotModel = PlotModel(title="Log Reg", xlabel=x, ylabel=y)
+	plot_ternary_log_reg_data(jdf, xcol=x, ycol=y, feature="Label10", plotModel=plotModel)
+	
+	y ="Low10"
+	x = "Adj Close"
+	plotModel = PlotModel(title="Log Reg", xlabel=x, ylabel=y)
+	plot_ternary_log_reg_data(jdf, xcol=x, ycol=y, feature="Label10", plotModel=plotModel)
+	
+	y ="Low10"
+	x = "High10"
+	plotModel = PlotModel(title="Log Reg", xlabel=x, ylabel=y)
+	plot_ternary_log_reg_data(jdf, xcol=x, ycol=y, feature="Label10", plotModel=plotModel)
+	'''
+	y ="Daily_Returns_Mean5"
+	x = "Daily_Returns"
+	plotModel = PlotModel(title="Log Reg", xlabel=x, ylabel=y)
+	plot_ternary_log_reg_data(jdf, xcol=x, ycol=y, feature="Label5", plotModel=plotModel)
+	
+	y ="Daily_Returns_Std5"
+	x = "Daily_Returns"
+	plotModel = PlotModel(title="Log Reg", xlabel=x, ylabel=y)
 	plot_ternary_log_reg_data(jdf, xcol=x, ycol=y, feature="Label5", plotModel=plotModel)
 
-#	print(df["Label5"].head(10))
+	y ="Daily_Returns_Mean10"
+	x = "Daily_Returns"
+	plotModel = PlotModel(title="Log Reg", xlabel=x, ylabel=y)
+	plot_ternary_log_reg_data(jdf, xcol=x, ycol=y, feature="Label10", plotModel=plotModel)
+
+	x = "Daily_Returns"
+	y = "Daily_Returns_Mean5"
+	z = "Daily_Returns_Std5"
+	plot_3d(jdf, xcol=x, ycol=y, zcol=z, feature="Label5")
 	
+	x = "High10"
+	y = "Low10"
+	z = "Daily_Returns_Mean10"
+	plot_3d(jdf, xcol=x, ycol=y, zcol=z, feature="Label10")	
+
+
